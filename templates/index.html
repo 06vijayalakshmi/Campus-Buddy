@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CampusBuddy{% if page != 'landing' %} · {{ page|title }}{% endif %}</title>
+  <meta name="description" content="CampusBuddy - simple student productivity and skill exchange platform">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+{% if page == 'landing' %}
+  <nav class="landing-nav">
+    <a class="brand" href="{{ url_for('home') }}"><span class="brand-mark">C</span> CampusBuddy</a>
+    <div class="nav-actions">
+      <a href="{{ url_for('login') }}" class="text-link">Log in</a>
+      <a href="{{ url_for('register') }}" class="btn btn-primary">Get started <i class="bi bi-arrow-right"></i></a>
+    </div>
+  </nav>
+
+  <main class="landing">
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="pulse"></span> Built for everyday college life</div>
+        <h1>Plan your day.<br><span>Learn together.</span></h1>
+        <p class="hero-text">CampusBuddy brings your academic tasks and peer skill exchange into one simple space — without the complexity.</p>
+        <div class="hero-buttons">
+          <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">Create free account <i class="bi bi-arrow-up-right"></i></a>
+          <a href="{{ url_for('login') }}" class="btn btn-ghost btn-lg">I already have an account</a>
+        </div>
+        <div class="trust-row">
+          <span><i class="bi bi-check-circle-fill"></i> Simple to use</span>
+          <span><i class="bi bi-check-circle-fill"></i> Student focused</span>
+          <span><i class="bi bi-check-circle-fill"></i> Free & lightweight</span>
+        </div>
+      </div>
+      <div class="hero-preview">
+        <div class="app-window">
+          <div class="window-top"><span></span><span></span><span></span><small>campusbuddy</small></div>
+          <div class="preview-body">
+            <div class="preview-sidebar">
+              <strong>CampusBuddy</strong>
+              <div class="mini-nav active">⌂ Dashboard</div>
+              <div class="mini-nav">✓ My Tasks</div>
+              <div class="mini-nav">♧ Skill Matches</div>
+            </div>
+            <div class="preview-main">
+              <p class="muted">Good morning 👋</p>
+              <h3>Your day at a glance</h3>
+              <div class="preview-grid">
+                <div class="mini-card accent"><small>Top priority</small><b>DBMS Assignment</b><span>Due tomorrow · High</span></div>
+                <div class="mini-card"><small>Progress</small><b>72%</b><span>4 of 6 tasks done</span></div>
+              </div>
+              <div class="mini-match"><div class="avatar">R</div><div><b>Rahul can teach Java</b><span>94% skill match</span></div><button>Connect</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features-section">
+      <div class="section-heading"><span class="eyebrow">ONE SIMPLE PLACE</span><h2>Everything a student needs to stay on track.</h2></div>
+      <div class="feature-grid">
+        <article class="feature-card"><div class="icon-box blue"><i class="bi bi-check2-square"></i></div><h3>Daily Tasks</h3><p>Add assignments and deadlines. A simple priority score tells you what deserves attention first.</p></article>
+        <article class="feature-card"><div class="icon-box purple"><i class="bi bi-people"></i></div><h3>Skill Exchange</h3><p>Show what you can teach and what you want to learn. Find useful peer matches in seconds.</p></article>
+        <article class="feature-card"><div class="icon-box green"><i class="bi bi-speedometer2"></i></div><h3>Clear Dashboard</h3><p>See today's progress, your top task and pending skill requests without digging through menus.</p></article>
+      </div>
+    </section>
+  </main>
+{% elif page in ['login','register'] %}
+      <div class="auth-page">
+        <div class="auth-card"><a class="brand center" href="{{ url_for('home') }}"><span class="brand-mark">C</span> CampusBuddy</a>
+          {% if page == 'login' %}<h2>Welcome back</h2><p class="muted">Log in to continue your student journey.</p><form method="post"><label>Email<input type="email" name="email" required placeholder="you@example.com"></label><label>Password<input type="password" name="password" required placeholder="••••••••"></label><button class="btn btn-primary full-btn">Log in <i class="bi bi-arrow-right"></i></button></form><p class="auth-foot">New here? <a href="{{ url_for('register') }}">Create an account</a></p>
+          {% else %}<h2>Create your account</h2><p class="muted">Start organizing your college life.</p><form method="post"><label>Name<input name="name" required placeholder="Your name"></label><label>Email<input type="email" name="email" required placeholder="you@example.com"></label><div class="split"><label>Branch<select name="branch"><option>CSE</option><option>ECE</option><option>EEE</option><option>MECH</option><option>CIVIL</option></select></label><label>Year<select name="year"><option>1</option><option>2</option><option>3</option><option>4</option></select></label></div><label>Password<input type="password" name="password" required minlength="6" placeholder="At least 6 characters"></label><button class="btn btn-primary full-btn">Create account <i class="bi bi-arrow-right"></i></button></form><p class="auth-foot">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>{% endif %}
+        </div>
+      </div>
+{% else %}
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="{{ url_for('dashboard') }}"><span class="brand-mark">C</span> CampusBuddy</a>
+      <div class="student-mini">
+        <div class="avatar">{{ user['name'][0]|upper }}</div>
+        <div><b>{{ user['name'] }}</b><small>{{ user['branch'] }} · Year {{ user['year'] }}</small></div>
+      </div>
+      <nav>
+        <a class="{{ 'active' if page == 'dashboard' }}" href="{{ url_for('dashboard') }}"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a>
+        <a class="{{ 'active' if page == 'skills' }}" href="{{ url_for('skills') }}"><i class="bi bi-stars"></i> My Skills</a>
+        <a class="{{ 'active' if page == 'matches' }}" href="{{ url_for('matches') }}"><i class="bi bi-people-fill"></i> Skill Matches</a>
+        <a class="{{ 'active' if page == 'requests' }}" href="{{ url_for('requests_page') }}"><i class="bi bi-send-fill"></i> Requests</a>
+        <a class="{{ 'active' if page == 'profile' }}" href="{{ url_for('profile') }}"><i class="bi bi-person-fill"></i> Profile</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <a href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-left"></i> Log out</a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="menu-btn" onclick="document.getElementById('sidebar').classList.toggle('open')"><i class="bi bi-list"></i></button>
+        <div>
+          {% if page == 'dashboard' %}<span class="top-label">OVERVIEW</span><h1>Good morning, {{ user['name'].split(' ')[0] }} 👋</h1>
+          {% elif page == 'skills' %}<span class="top-label">LEARNING</span><h1>My Skills</h1>
+          {% elif page == 'matches' %}<span class="top-label">PEER LEARNING</span><h1>Skill Matches</h1>
+          {% elif page == 'requests' %}<span class="top-label">CONNECTIONS</span><h1>Requests</h1>
+          {% else %}<span class="top-label">ACCOUNT</span><h1>Profile</h1>{% endif %}
+        </div>
+        <a href="{{ url_for('profile') }}" class="top-avatar">{{ user['name'][0]|upper }}</a>
+      </header>
+
+      {% if error %}<div class="alert error"><i class="bi bi-exclamation-circle"></i>{{ error }}</div>{% endif %}
+
+      {% if page == 'dashboard' %}
+      <section class="welcome-card">
+        <div><span class="eyebrow light">TODAY'S PLAN</span><h2>Make progress, one task at a time.</h2><p>Focus on your highest-priority work and keep your momentum going.</p></div>
+        <div class="date-pill"><i class="bi bi-calendar3"></i> {{ now if now else "Today" }}</div>
+      </section>
+
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon blue"><i class="bi bi-list-check"></i></div><div><span>Total tasks</span><b>{{ tasks|length }}</b></div></div>
+        <div class="stat-card"><div class="stat-icon green"><i class="bi bi-check-circle"></i></div><div><span>Completed</span><b>{{ tasks|selectattr('completed')|list|length }}</b></div></div>
+        <div class="stat-card"><div class="stat-icon purple"><i class="bi bi-people"></i></div><div><span>Requests</span><b>{{ pending_requests }}</b></div></div>
+      </div>
+
+      <div class="content-grid">
+        <section class="panel">
+          <div class="panel-head"><div><span class="top-label">YOUR TASKS</span><h3>Priority list</h3></div><button class="small-btn" onclick="openModal('taskModal')"><i class="bi bi-plus"></i> Add task</button></div>
+          {% if tasks %}
+            <div class="progress-wrap"><div><span>Daily progress</span><b>{{ progress }}%</b></div><div class="progress"><span style="width:{{ progress }}%"></span></div></div>
+            <div class="task-list">
+            {% for task in tasks %}
+              <div class="task {{ 'done' if task.completed }}">
+                <form method="post" action="{{ url_for('toggle_task', task_id=task.id) }}"><button class="check" title="Complete task"><i class="bi bi-check"></i></button></form>
+                <div class="task-info"><b>{{ task.title }}</b><span>Due {{ task.deadline }} · <em class="{{ task.importance|lower }}">{{ task.importance }}</em></span></div>
+                {% if not task.completed %}<span class="score">{{ task.score }} pts</span>{% else %}<span class="done-label">Done</span>{% endif %}
+                <form method="post" action="{{ url_for('delete_task', task_id=task.id) }}"><button class="icon-btn" title="Delete"><i class="bi bi-trash3"></i></button></form>
+              </div>
+            {% endfor %}
+            </div>
+          {% else %}
+            <div class="empty"><i class="bi bi-journal-plus"></i><h3>No tasks yet</h3><p>Add your first academic task to start your day.</p><button class="btn btn-primary" onclick="openModal('taskModal')">Add first task</button></div>
+          {% endif %}
+        </section>
+
+        <aside class="side-column">
+          <section class="panel priority-card">
+            <div class="panel-head"><div><span class="top-label">FOCUS</span><h3>Top priority</h3></div><i class="bi bi-lightning-charge-fill focus-icon"></i></div>
+            {% if top_task %}
+              <div class="focus-task"><div class="focus-number">{{ top_task.score }}</div><div><h3>{{ top_task.title }}</h3><p>Due {{ top_task.deadline }}</p><span class="tag {{ top_task.importance|lower }}">{{ top_task.importance }} priority</span></div></div>
+            {% else %}<p class="muted">You're all caught up. Great work! 🎉</p>{% endif %}
+          </section>
+          <section class="panel tip-card"><i class="bi bi-stars"></i><div><b>CampusBuddy tip</b><p>Break large assignments into smaller tasks so your priority list stays realistic.</p></div></section>
+        </aside>
+      </div>
+
+      {% elif page == 'skills' %}
+      <section class="page-intro"><div><p>Tell people what you know and what you want to learn.</p></div></section>
+      <form method="post" class="panel form-panel">
+        <div class="form-section"><div class="form-icon purple"><i class="bi bi-mortarboard-fill"></i></div><div><h3>I can teach</h3><p>Separate skills with commas.</p><input name="teach_skills" value="{{ user['teach_skills'] }}" placeholder="Python, Java, HTML, Photoshop"></div></div>
+        <div class="form-section"><div class="form-icon blue"><i class="bi bi-lightbulb-fill"></i></div><div><h3>I want to learn</h3><p>What would you like to learn from other students?</p><input name="learn_skills" value="{{ user['learn_skills'] }}" placeholder="React, DSA, UI/UX, Public Speaking"></div></div>
+        <div class="form-actions"><a href="{{ url_for('dashboard') }}" class="btn btn-ghost">Cancel</a><button class="btn btn-primary">Save skills <i class="bi bi-check2"></i></button></div>
+      </form>
+      {% elif page == 'matches' %}
+      <section class="page-intro"><p>We look for students who can teach something you want to learn.</p><a class="btn btn-ghost" href="{{ url_for('skills') }}">Edit my skills</a></section>
+      {% if matches %}
+      <div class="match-grid">
+      {% for m in matches %}
+        <article class="match-card">
+          <div class="match-top"><div class="large-avatar">{{ m.name[0]|upper }}</div><div class="match-score">{{ m.score }}%<small>match</small></div></div>
+          <h3>{{ m.name }}</h3><p class="muted">{{ m.branch }} · Year {{ m.year }}</p>
+          {% if m.bio %}<p class="bio">{{ m.bio }}</p>{% endif %}
+          <div class="skill-tags">{% for skill in m.skills %}<span>{{ skill }}</span>{% endfor %}</div>
+          <div class="match-actions">
+            {% for skill in m.skills %}
+              {% if not ((m.id, skill.lower()) in []) %}
+              <form method="post" action="{{ url_for('send_request', receiver_id=m.id, skill=skill) }}"><button class="btn btn-primary btn-sm">Request {{ skill }}</button></form>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </article>
+      {% endfor %}
+      </div>
+      {% else %}
+      <div class="panel empty"><i class="bi bi-people"></i><h3>No matches yet</h3><p>Add at least one skill you want to learn, then come back here.</p><a href="{{ url_for('skills') }}" class="btn btn-primary">Set my skills</a></div>
+      {% endif %}
+      {% elif page == 'requests' %}
+      <div class="two-panels">
+        <section class="panel"><div class="panel-head"><div><span class="top-label">INCOMING</span><h3>People want to learn from you</h3></div></div>
+        {% if incoming %}{% for r in incoming %}<div class="request-row"><div class="avatar">{{ r.sender_name[0]|upper }}</div><div class="request-main"><b>{{ r.sender_name }}</b><span>{{ r.skill }} · {{ r.sender_branch }}</span></div><span class="status {{ r.status|lower }}">{{ r.status }}</span>{% if r.status == 'Pending' %}<form method="post"><input type="hidden" name="request_id" value="{{ r.id }}"><input type="hidden" name="status" value="Accepted"><button class="accept">Accept</button></form><form method="post"><input type="hidden" name="request_id" value="{{ r.id }}"><input type="hidden" name="status" value="Declined"><button class="decline">Decline</button></form>{% endif %}</div>{% endfor %}{% else %}<div class="empty compact"><i class="bi bi-inbox"></i><p>No incoming requests.</p></div>{% endif %}</section>
+        <section class="panel"><div class="panel-head"><div><span class="top-label">OUTGOING</span><h3>Your requests</h3></div></div>
+        {% if outgoing %}{% for r in outgoing %}<div class="request-row"><div class="avatar">{{ r.receiver_name[0]|upper }}</div><div class="request-main"><b>{{ r.receiver_name }}</b><span>{{ r.skill }}</span></div><span class="status {{ r.status|lower }}">{{ r.status }}</span></div>{% endfor %}{% else %}<div class="empty compact"><i class="bi bi-send"></i><p>No requests sent yet.</p></div>{% endif %}</section>
+      </div>
+      {% elif page == 'profile' %}
+      <form method="post" class="profile-layout">
+        <section class="panel profile-card"><div class="profile-hero"><div class="profile-avatar">{{ user['name'][0]|upper }}</div><div><h2>{{ user['name'] }}</h2><p>{{ user['email'] }}</p></div></div><div class="profile-fields"><label>Full name<input name="name" value="{{ user['name'] }}" required></label><label>Branch<select name="branch"><option {% if user['branch']=='CSE' %}selected{% endif %}>CSE</option><option {% if user['branch']=='ECE' %}selected{% endif %}>ECE</option><option {% if user['branch']=='EEE' %}selected{% endif %}>EEE</option><option {% if user['branch']=='MECH' %}selected{% endif %}>MECH</option><option {% if user['branch']=='CIVIL' %}selected{% endif %}>CIVIL</option></select></label><label>Year<select name="year">{% for y in [1,2,3,4] %}<option value="{{ y }}" {% if user['year']==y %}selected{% endif %}>{{ y }}</option>{% endfor %}</select></label><label class="full">Short bio<textarea name="bio" rows="4" placeholder="A short introduction...">{{ user['bio'] }}</textarea></label></div><div class="form-actions"><button class="btn btn-primary">Save profile <i class="bi bi-check2"></i></button></div></section>
+      </form>
+
+      {% endif %}
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="taskModal">
+    <div class="modal-card"><button class="modal-close" onclick="closeModal('taskModal')"><i class="bi bi-x"></i></button><span class="eyebrow">NEW TASK</span><h2>Add a task</h2><p class="muted">Give yourself one clear next step.</p><form method="post" action="{{ url_for('add_task') }}"><label>Task title<input name="title" required placeholder="e.g. Finish DBMS assignment"></label><div class="split"><label>Deadline<input type="date" name="deadline" required></label><label>Importance<select name="importance"><option>High</option><option selected>Medium</option><option>Low</option></select></label></div><button class="btn btn-primary full-btn">Add task <i class="bi bi-plus-lg"></i></button></form></div>
+  </div>
+{% endif %}
+<script>
+function openModal(id){document.getElementById(id).classList.add('show')}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+document.addEventListener('keydown', e => { if(e.key === 'Escape') document.querySelectorAll('.modal-backdrop').forEach(x=>x.classList.remove('show')); });
+document.querySelectorAll('.modal-backdrop').forEach(m => m.addEventListener('click', e => { if(e.target === m) m.classList.remove('show'); }));
+</script>
+</body>
+</html>
